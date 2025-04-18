@@ -1,0 +1,8 @@
+name = "Lean 4"
+grammar = "lean"
+path_suffixes = ["lean"]
+line_comments = ["-- "]
+"blockComment" = ["/-", "-/"]
+autoclose_before = ""
+# brackets = []
+tab_size = 2

@@ -1,0 +1,15 @@
+id = "lean4"
+name = "Lean 4"
+description = "Lean 4 support."
+version = "0.0.1"
+schema_version = 1
+authors = ["Blackbird <sirius.su128@gmail.com>"]
+repository = "https://github.com/blackbird314/lean4"
+
+[language_servers.lean4-lsp]
+name = "Lean4 Language Server"
+languages = ["Lean 4"]
+
+[grammars.lean]
+repository = "https://github.com/Julian/tree-sitter-lean"
+rev = "efe6b87145608d12f5996bd7f0cf6095a0e82261"
