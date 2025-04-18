@@ -2,9 +2,6 @@ use zed::settings::LspSettings;
 use zed_extension_api::serde_json::Value;
 use zed_extension_api::{self as zed, Result};
 
-// TODO: Implement infoview like VSCode
-// TODO: Install, uninstall and update Elan like VSCode
-// It seems Zed extension API doesn't support executing commands like 'elan-init -y --default-toolchain nightly'
 struct Lean4Extension;
 
 impl zed::Extension for Lean4Extension {
@@ -40,6 +37,9 @@ impl zed::Extension for Lean4Extension {
             args: vec!["serve".into()],
             env: worktree.shell_env(),
         })
+        
+        // TODO: Install, uninstall and update Elan like VSCode
+        // It seems Zed extension API doesn't support executing commands like 'elan-init -y --default-toolchain nightly'
     }
 
     fn language_server_initialization_options(
