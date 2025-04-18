@@ -4,7 +4,7 @@ description = "Lean 4 support."
 version = "0.0.1"
 schema_version = 1
 authors = ["Blackbird <sirius.su128@gmail.com>"]
-repository = "https://github.com/blackbird314/lean4"
+repository = "https://github.com/zed-extensions/lean4"
 
 [language_servers.lean4-lsp]
 name = "Lean4 Language Server"
