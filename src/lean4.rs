@@ -1,6 +1,6 @@
-use zed::settings::LspSettings;
-use zed_extension_api::serde_json::Value;
-use zed_extension_api::{self as zed, Result};
+use zed::Result;
+use zed::{serde_json::Value, settings::LspSettings};
+use zed_extension_api::{self as zed};
 
 struct Lean4Extension;
 
@@ -37,7 +37,7 @@ impl zed::Extension for Lean4Extension {
             args: vec!["serve".into()],
             env: worktree.shell_env(),
         })
-        
+
         // TODO: Install, uninstall and update Elan like VSCode
         // It seems Zed extension API doesn't support executing commands like 'elan-init -y --default-toolchain nightly'
     }

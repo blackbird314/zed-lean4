@@ -17,7 +17,7 @@ lean --version
 ## TODO list
 
 - **_Tree-sitter-lean is experimental and needs improvement._**
-- Install, update and ninstall _elan_ like VSCode
+- Install, update and uninstall _elan_ like VSCode
 - Implement infoview like [VSCode](https://github.com/leanprover/vscode-lean4) and [Neovim](https://github.com/Julian/lean.nvim).
 
 ## Development
