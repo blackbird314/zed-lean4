@@ -1,7 +1,7 @@
 id = "lean4"
 name = "Lean 4"
 description = "Lean 4 support."
-version = "0.0.2"
+version = "0.0.3"
 schema_version = 1
 authors = ["Blackbird <sirius.su128@gmail.com>"]
 repository = "https://github.com/blackbird314/zed-lean4"
