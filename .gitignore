@@ -1,6 +1,5 @@
 /target
 /grammars
-Cargo.lock
 extension.wasm
 .DS_Store
 *.wasm
