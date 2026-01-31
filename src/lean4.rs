@@ -18,14 +18,14 @@ impl zed::Extension for Lean4Extension {
 
         // Step 1: Check language server path specified in LSP settings
         let lsp_settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)?;
-        if let Some(binary_settings) = lsp_settings.binary {
-            if let Some(path) = binary_settings.path {
-                return Ok(zed::Command {
-                    command: path,
-                    args: binary_settings.arguments.unwrap_or_default(),
-                    env: shell_env,
-                });
-            }
+        if let Some(binary_settings) = lsp_settings.binary
+            && let Some(path) = binary_settings.path
+        {
+            return Ok(zed::Command {
+                command: path,
+                args: binary_settings.arguments.unwrap_or_default(),
+                env: shell_env,
+            });
         }
 
         // Step 2: Check if lake is available in PATH
