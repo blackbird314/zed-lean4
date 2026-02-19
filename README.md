@@ -26,7 +26,8 @@ elan self uninstall
 
 ### Abbreviation
 
-Abbreviation (unicode character) insertion is supported by [snippets](https://github.com/blackbird314/zed-lean4/blob/main/snippets.json).
+- To use LSP Semantic tokens highlight, add `"semantic_tokens": "combined"` in `settings.json`.
+- Abbreviation (unicode character) insertion is supported by [snippets](https://github.com/blackbird314/zed-lean4/blob/main/snippets.json).
 
 ## TODO list
 
