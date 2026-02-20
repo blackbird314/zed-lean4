@@ -129,8 +129,7 @@ impl zed::Extension for Lean4Extension {
             .args(["-y", "--default-toolchain", "leanprover/lean4:stable"])
             .output()?;
 
-        std::fs::remove_dir_all(&version_dir)
-            .map_err(|e| format!("Failed to remove directory: {e}"))?;
+        std::fs::remove_dir_all(&version_dir).ok();
 
         Ok(zed::Command {
             command: lake_path_str,
