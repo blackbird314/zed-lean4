@@ -24,10 +24,13 @@ elan self uninstall
 
 ## Features
 
+### Highlight
+
+For optimal highlighting, add `"semantic_tokens": "combined"` in `settings.json`, which will enable LSP semantic tokens highlight.
+
 ### Abbreviation
 
-- To enable LSP Semantic tokens highlight, add `"semantic_tokens": "combined"` in `settings.json`.
-- Abbreviation (unicode character) insertion is supported by [snippets](https://github.com/blackbird314/zed-lean4/blob/main/snippets.json).
+Abbreviation (unicode character) insertion is supported by [snippets](https://github.com/owlx56/zed-lean4/blob/main/snippets/lean%204.json).
 
 ## TODO list
 
