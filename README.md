@@ -14,19 +14,19 @@ elan default nightly
 lean --version
 ```
 
-**If elan is not detected, this extension will automatically install it and set the default Lean version to the latest stable release.** During installation, elan automatically adds itself to your PATH environment variable.
+<!--**If elan is not detected, this extension will automatically install it and set the default Lean version to the latest stable release.** During installation, elan automatically adds itself to your PATH environment variable.
 
 The Lean toolchain can be completely removed, deleting all installed files and reverting any environment variable changes made during installation. To do so, simply run:
 
 ```sh
 elan self uninstall
-```
+```-->
 
 ## Features
 
 ### Abbreviation
 
-- To use LSP Semantic tokens highlight, add `"semantic_tokens": "combined"` in `settings.json`.
+- To enable LSP Semantic tokens highlight, add `"semantic_tokens": "combined"` in `settings.json`.
 - Abbreviation (unicode character) insertion is supported by [snippets](https://github.com/blackbird314/zed-lean4/blob/main/snippets.json).
 
 ## TODO list
