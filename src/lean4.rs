@@ -1,6 +1,5 @@
-use zed::Result;
-use zed::{serde_json::Value, settings::LspSettings};
-use zed_extension_api::{self as zed};
+use std::{env, fs, path::PathBuf};
+use zed_extension_api::{self as zed, Result, serde_json::Value, settings::LspSettings};
 
 struct Lean4Extension;
 
@@ -16,7 +15,7 @@ impl zed::Extension for Lean4Extension {
     ) -> Result<zed::Command> {
         let shell_env = worktree.shell_env();
 
-        // Step 1: Check language server path specified in LSP settings
+        // Check language server path specified in LSP settings
         let lsp_settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)?;
         if let Some(binary_settings) = lsp_settings.binary
             && let Some(path) = binary_settings.path
@@ -24,28 +23,28 @@ impl zed::Extension for Lean4Extension {
             return Ok(zed::Command {
                 command: path,
                 args: binary_settings.arguments.unwrap_or_default(),
-                env: shell_env,
+                env: vec![],
             });
         }
 
-        // Step 2: Check if lake is available in PATH
+        // Check if lake is available in PATH
         if let Some(path) = worktree.which("lake") {
             return Ok(zed::Command {
                 command: path,
                 args: vec!["serve".into(), "--".into()],
-                env: shell_env,
+                env: vec![],
             });
         }
 
-        // Step 3: Check if lake is available in ELAN_HOME or default path
+        // Check ELAN_HOME or default path
         let elan_home = shell_env
             .iter()
-            .find_map(|(k, v)| (k == "ELAN_HOME").then_some(std::path::PathBuf::from(v)))
+            .find_map(|(k, v)| (k == "ELAN_HOME").then_some(PathBuf::from(v)))
             .or_else(|| {
                 let home = shell_env
                     .iter()
                     .find_map(|(k, v)| (k == "HOME" || k == "USERPROFILE").then_some(v))?;
-                Some(std::path::PathBuf::from(home).join(".elan"))
+                Some(PathBuf::from(home).join(".elan"))
             })
             .ok_or("Failed to find ELAN_HOME, HOME, or USERPROFILE")?;
 
@@ -61,11 +60,11 @@ impl zed::Extension for Lean4Extension {
             return Ok(zed::Command {
                 command: lake_path_str,
                 args: vec!["serve".into(), "--".into()],
-                env: shell_env,
+                env: vec![],
             });
         }
 
-        // Step 4: Download and Install Lean 4 toolchain
+        // Download and Install Lean 4 toolchain
         let release = zed::latest_github_release(
             "leanprover/elan",
             zed::GithubReleaseOptions {
@@ -120,7 +119,7 @@ impl zed::Extension for Lean4Extension {
         .map_err(|e| format!("Failed to download file: {e}"))?;
 
         let cwd =
-            std::env::current_dir().map_err(|e| format!("Failed to get current directory: {e}"))?;
+            env::current_dir().map_err(|e| format!("Failed to get current directory: {e}"))?;
         let elan_init_path = cwd.join(&version_dir).join(elan_init_name);
         let elan_init_path_str = elan_init_path.to_string_lossy().to_string();
 
@@ -129,12 +128,12 @@ impl zed::Extension for Lean4Extension {
             .args(["-y", "--default-toolchain", "leanprover/lean4:stable"])
             .output()?;
 
-        std::fs::remove_dir_all(&version_dir).ok();
+        fs::remove_dir_all(&version_dir).ok();
 
         Ok(zed::Command {
             command: lake_path_str,
             args: vec!["serve".into(), "--".into()],
-            env: shell_env,
+            env: vec![],
         })
     }
 
