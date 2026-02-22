@@ -1,6 +1,8 @@
 use std::{env, fs, path::PathBuf};
 use zed_extension_api::{self as zed, Result, serde_json::Value, settings::LspSettings};
 
+const DEFAULT_ELAN_TOOLCHAIN: &str = "stable";
+
 struct Lean4Extension;
 
 impl zed::Extension for Lean4Extension {
@@ -14,20 +16,20 @@ impl zed::Extension for Lean4Extension {
         worktree: &zed::Worktree,
     ) -> Result<zed::Command> {
         let shell_env = worktree.shell_env();
-
-        // Check language server path specified in LSP settings
         let lsp_settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)?;
-        if let Some(binary_settings) = lsp_settings.binary
-            && let Some(path) = binary_settings.path
+
+        // Check lsp.lean4-lsp.binary
+        if let Some(binary) = lsp_settings.binary
+            && let Some(path) = binary.path
         {
             return Ok(zed::Command {
                 command: path,
-                args: binary_settings.arguments.unwrap_or_default(),
+                args: binary.arguments.unwrap_or_default(),
                 env: vec![],
             });
         }
 
-        // Check if lake is available in PATH
+        // Check $PATH
         if let Some(path) = worktree.which("lake") {
             return Ok(zed::Command {
                 command: path,
@@ -36,7 +38,7 @@ impl zed::Extension for Lean4Extension {
             });
         }
 
-        // Check ELAN_HOME or default path
+        // Check $ELAN_HOME or default path
         let elan_home = shell_env
             .iter()
             .find_map(|(k, v)| (k == "ELAN_HOME").then_some(PathBuf::from(v)))
@@ -64,7 +66,29 @@ impl zed::Extension for Lean4Extension {
             });
         }
 
-        // Download and Install Lean 4 toolchain
+        // Check lsp.lean4-lsp.settings
+        let elan_auto_install = lsp_settings
+            .settings
+            .as_ref()
+            .and_then(|s| s.pointer("/elan_auto_install"))
+            .and_then(Value::as_bool)
+            .unwrap_or(false);
+        
+        if !elan_auto_install {
+            return Err(
+                "Failed to find lake in PATH or ELAN_HOME/default path. Enable lsp.lean4-lsp.settings.elan_auto_install or configure lsp.lean4-lsp.binary.path."
+                    .into(),
+            );
+        }
+
+        let elan_default_toolchain = lsp_settings
+            .settings
+            .as_ref()
+            .and_then(|s| s.pointer("/elan_default_toolchain"))
+            .and_then(Value::as_str)
+            .unwrap_or("stable");
+
+        // Install elan and lean 4 toolchain
         let release = zed::latest_github_release(
             "leanprover/elan",
             zed::GithubReleaseOptions {
@@ -125,7 +149,11 @@ impl zed::Extension for Lean4Extension {
 
         zed::make_file_executable(&elan_init_path_str)?;
         zed::Command::new(&elan_init_path_str)
-            .args(["-y", "--default-toolchain", "leanprover/lean4:stable"])
+            .args([
+                "-y",
+                "--default-toolchain",
+                &format!("leanprover/lean4:{elan_default_toolchain}"),
+            ])
             .output()?;
 
         fs::remove_dir_all(&version_dir).ok();

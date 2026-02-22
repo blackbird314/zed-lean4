@@ -7,30 +7,47 @@ A [Lean(4) Theorem Prover](https://lean-lang.org/) extension for [Zed](https://z
 
 ## Lean Toolchain
 
-The Lean Language Server is integrated with the Lean toolchain. It is recommended to manage Lean toolchain versions via [_elan_](https://github.com/leanprover/elan?tab=readme-ov-file#installation). For example, you can install the nightly Lean version by running:
+The Lean Language Server is integrated with the Lean toolchain. It is recommended to manage Lean toolchain versions via [_elan_](https://github.com/leanprover/elan?tab=readme-ov-file#installation). For example, you can install the stable Lean version by running:
 
 ```sh
-elan default nightly
+elan default stable
 lean --version
 ```
-
-<!--**If elan is not detected, this extension will automatically install it and set the default Lean version to the latest stable release.** During installation, elan automatically adds itself to your PATH environment variable.
-
-The Lean toolchain can be completely removed, deleting all installed files and reverting any environment variable changes made during installation. To do so, simply run:
-
-```sh
-elan self uninstall
-```-->
 
 ## Features
 
 ### Highlight
 
-For optimal highlighting, add `"semantic_tokens": "combined"` in `settings.json`, which will enable LSP semantic tokens highlight.
+For optimal highlighting, set `"semantic_tokens"` to `"combined"`, which will enable LSP semantic tokens highlight.
 
 ### Abbreviation
 
 Abbreviation (unicode character) insertion is supported by [snippets](https://github.com/owlx56/zed-lean4/blob/main/snippets/lean%204.json).
+
+### Auto Installation
+
+If Lean 4 is not detected, this extension can automatically install elan with default toolchain. To enable this feature, set `"elan_auto_install"` to `true`. You can also specify the default toolchain by setting `"elan_default_toolchain"` to `"stable"`, `"nightly"` or `"v4.28.0"`.
+
+During installation, the extension will automatically add `~/.elan` to your $PATH.
+
+The Lean toolchain can be completely removed by running `elan self uninstall`.
+
+## Recomended Settings
+
+```json
+// Zed settings
+{
+  "semantic_tokens": "combined",
+  "lsp": {
+    "lean4-lsp": {
+      "settings": {
+        "elan_auto_install": true,
+        "elan_default_toolchain": "stable"
+      }
+    }
+  }
+}
+```
 
 ## TODO list
 
