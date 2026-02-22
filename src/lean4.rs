@@ -1,8 +1,6 @@
 use std::{env, fs, path::PathBuf};
 use zed_extension_api::{self as zed, Result, serde_json::Value, settings::LspSettings};
 
-const DEFAULT_ELAN_TOOLCHAIN: &str = "stable";
-
 struct Lean4Extension;
 
 impl zed::Extension for Lean4Extension {
@@ -38,7 +36,7 @@ impl zed::Extension for Lean4Extension {
             });
         }
 
-        // Check $ELAN_HOME or default path
+        // Check $ELAN_HOME or default directory
         let elan_home = shell_env
             .iter()
             .find_map(|(k, v)| (k == "ELAN_HOME").then_some(PathBuf::from(v)))
