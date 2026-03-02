@@ -30,10 +30,9 @@ lean --version
 - If Lean 4 is not detected, this extension can automatically install elan with default toolchain. To enable this feature, you must set `"elan_auto_install"` to `true`. You can also specify the default toolchain by setting `"elan_default_toolchain"` to `"stable"`, `"nightly"` or `"v4.28.0"`.
 - During installation, the extension will automatically add `~/.elan` to your $PATH. The Lean toolchain can be completely removed by running `elan self uninstall`.
 
-## Settings Sample
+## settings.json Sample
 
 ```json
-// Zed settings
 {
   "semantic_tokens": "combined",
   "lsp": {
@@ -53,8 +52,8 @@ lean --version
 
 ## TODO list
 
-- **_Tree-sitter-lean is experimental and needs improvement_**
 - Implement infoview like [VSCode](https://github.com/leanprover/vscode-lean4) and [Neovim](https://github.com/Julian/lean.nvim)
+- Tree-sitter-lean is experimental and needs improvement
 - Update and uninstall _elan_
 
 ## Development
